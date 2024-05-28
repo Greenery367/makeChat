@@ -9,7 +9,7 @@ import java.net.Socket;
 public abstract class AbstractClient {
 	
 	public String name;
-	private Socket socket;
+	public Socket socket;
 	private PrintWriter socketWriter;
 	private BufferedReader socketReader;
 	private BufferedReader keyboardReader;
@@ -18,7 +18,7 @@ public abstract class AbstractClient {
 		this.name=name;
 	}
 	
-	protected void setSocket(Socket socket) {
+	public void setSocket(Socket socket) {
 		this.socket=socket;
 	}
 	

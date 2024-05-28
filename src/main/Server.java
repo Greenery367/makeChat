@@ -1,8 +1,10 @@
 package main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,8 +13,27 @@ import java.util.Vector;
 public class Server {
 	
 	
-	private int port=5555;
+	public int port;
+	public ServerSocket serverSocket;
+	public Socket socket;
+	public String name;
+	public String ip;
+	
 	private static Vector<PrintWriter> clientWriters=new Vector<>();
+	
+	public Server() {}
+	
+	public Server(int port) {
+		try (ServerSocket serverSocket=new ServerSocket(port);){
+			ServerFrame serverFrame=new ServerFrame();
+			while(true) {
+				Socket socket=serverSocket.accept();
+				new ClientHandler(socket).start();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private static class ClientHandler extends Thread{
 		private Socket socket;
@@ -74,21 +95,74 @@ public class Server {
 		}
 	}
 	
-	
 	public static void main(String[] args) {
 		System.out.println("연결 중...");
-		
-		try (ServerSocket serverSocket=new ServerSocket(5555)){
-			while(true) {
-				Socket socket=serverSocket.accept();
-				new ClientHandler(socket).start();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		new Server(5555);
 		}
-		
-		
 	}
 	
+	public void startConnect() {
+		try {
+			serverSocket=new ServerSocket(5555);
+			connectClient();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 	
-}}
+	private void connectClient() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				while(true) {
+					try {
+						socket=serverSocket.accept();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ConnectedUser user=new ConnectedUser(socket);
+					user.start();
+				}
+				
+			}
+			
+		});
+	}
+	
+	private class ConnectedUser extends Thread{
+		private Socket socket;
+		
+		private BufferedReader reader;
+		private BufferedWriter writer;
+		
+		private String id;
+		private String myRoomName;
+		
+		public ConnectedUser(Socket socket) {
+			this.socket=socket;
+			connectIO();
+		}
+		
+		private void connectIO() {
+			try {
+				reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				writer=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+				sendInformation();
+			} catch (IOException e) {
+				// TODO: handle exception
+			}
+		}
+		
+		private void sendInformation() {
+			try {
+				id=reader.readLine();
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+	}
+	
+	}

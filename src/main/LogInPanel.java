@@ -4,17 +4,23 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class ClientFrame extends JFrame{
+public class LogInPanel extends JFrame{
 
 	
 	private JFrame mainFrame;
@@ -29,13 +35,14 @@ public class ClientFrame extends JFrame{
 	private JLabel nameLabel;
 	private JLabel nateIcon;
 
-	public ClientFrame() {
-		setTitle("네이트온 채팅 프로그램 : 클라이언트");
+	public LogInPanel() {
 		setSize(400, 700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		
 		initData();
 		setInitLayout();
+		logIn();
 	} 
 
 	private void initData() {
@@ -80,16 +87,34 @@ public class ClientFrame extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String ip=ipField.getText();
-				int port=Integer.parseInt(portField.getText());
-				String id=nameField.getText();
+				clickConnectBtn();
 			}
-			
+		});
+		
+		this.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+					clickConnectBtn();
+				}
+			}
 		});
 	}
 
+	private void clickConnectBtn() {
+		if((ipField.getText().equals(null))&&(portField.getText().equals(null))
+				&&(nameField.getText().equals(null))) {
+			String ip=ipField.getText();
+			String stringPort=portField.getText();			
+			int port=Integer.parseInt(stringPort);
+			String name=nameField.getText();
+			
+		} else {
+			JOptionPane.showMessageDialog(null, "다시 입력해주세요");
+		}
+	}
+	
 	public static void main(String[] args) {
-		new ClientFrame();
+		new LogInPanel();
 	}
 
 }

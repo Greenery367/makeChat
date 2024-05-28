@@ -4,18 +4,28 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class ServerFrame extends JFrame{
 
+	
+	private Server server=new Server();
 	
 	private JFrame mainFrame;
 	private JPanel loginPanel;
@@ -30,12 +40,13 @@ public class ServerFrame extends JFrame{
 	private JLabel nateIcon;
 
 	public ServerFrame() {
-		setTitle("네이트온 채팅 프로그램 : 서버");
 		setSize(400, 700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		
 		initData();
 		setInitLayout();
+		initListener();
 	} 
 
 	private void initData() {
@@ -75,21 +86,13 @@ public class ServerFrame extends JFrame{
 		
 	}
 	
-	private void logIn() {
-		button.addActionListener(new ActionListener() {
-
+	private void initListener() {
+		button.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				String ip=ipField.getText();
-				int port=Integer.parseInt(portField.getText());
-				String id=nameField.getText();
+			public void mouseClicked(MouseEvent e) {
+				server.startConnect();
 			}
-			
 		});
 	}
-
-	public static void main(String[] args) {
-		new ServerFrame();
 	}
 
-}
