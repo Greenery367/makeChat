@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class LogInPanel extends JFrame{
+public class LogInPanel extends JPanel{
 
 	
 	private JFrame mainFrame;
@@ -34,16 +34,163 @@ public class LogInPanel extends JFrame{
 	private JTextField nameField;
 	private JLabel nameLabel;
 	private JLabel nateIcon;
+	
+	private CallBackClientbtwService callBackService;
 
-	public LogInPanel() {
+	public LogInPanel(CallBackClientbtwService callBackService) {
+		this.callBackService=callBackService;
 		setSize(400, 700);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
 		
 		initData();
 		setInitLayout();
 		logIn();
 	} 
+	
+	
+
+	public JFrame getMainFrame() {
+		return mainFrame;
+	}
+
+
+
+	public void setMainFrame(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+	}
+
+
+
+	public JPanel getLoginPanel() {
+		return loginPanel;
+	}
+
+
+
+	public void setLoginPanel(JPanel loginPanel) {
+		this.loginPanel = loginPanel;
+	}
+
+
+
+	public JButton getButton() {
+		return button;
+	}
+
+
+
+	public void setButton(JButton button) {
+		this.button = button;
+	}
+
+
+
+	public JLabel getLabel() {
+		return label;
+	}
+
+
+
+	public void setLabel(JLabel label) {
+		this.label = label;
+	}
+
+
+
+	public JTextField getIpField() {
+		return ipField;
+	}
+
+
+
+	public void setIpField(JTextField ipField) {
+		this.ipField = ipField;
+	}
+
+
+
+	public JLabel getIpLabel() {
+		return ipLabel;
+	}
+
+
+
+	public void setIpLabel(JLabel ipLabel) {
+		this.ipLabel = ipLabel;
+	}
+
+
+
+	public JTextField getPortField() {
+		return portField;
+	}
+
+
+
+	public void setPortField(JTextField portField) {
+		this.portField = portField;
+	}
+
+
+
+	public JLabel getPortLabel() {
+		return portLabel;
+	}
+
+
+
+	public void setPortLabel(JLabel portLabel) {
+		this.portLabel = portLabel;
+	}
+
+
+
+	public JTextField getNameField() {
+		return nameField;
+	}
+
+
+
+	public void setNameField(JTextField nameField) {
+		this.nameField = nameField;
+	}
+
+
+
+	public JLabel getNameLabel() {
+		return nameLabel;
+	}
+
+
+
+	public void setNameLabel(JLabel nameLabel) {
+		this.nameLabel = nameLabel;
+	}
+
+
+
+	public JLabel getNateIcon() {
+		return nateIcon;
+	}
+
+
+
+	public void setNateIcon(JLabel nateIcon) {
+		this.nateIcon = nateIcon;
+	}
+
+
+
+	public CallBackClientbtwService getCallBackService() {
+		return callBackService;
+	}
+
+
+
+	public void setCallBackService(CallBackClientbtwService callBackService) {
+		this.callBackService = callBackService;
+	}
+
+
 
 	private void initData() {
 		button = new JButton("로그인");
@@ -101,20 +248,20 @@ public class LogInPanel extends JFrame{
 	}
 
 	private void clickConnectBtn() {
-		if((ipField.getText().equals(null))&&(portField.getText().equals(null))
-				&&(nameField.getText().equals(null))) {
-			String ip=ipField.getText();
-			String stringPort=portField.getText();			
-			int port=Integer.parseInt(stringPort);
+		if((!ipField.getText().equals(null))&&(!portField.getText().equals(null))
+				&&(!nameField.getText().equals(null))) {
+			String ip=ipField.getText();		
+			int port=Integer.parseInt(portField.getText());
 			String name=nameField.getText();
 			
+			callBackService.clickConnectServerBtn(ip, port, name);
+		
 		} else {
 			JOptionPane.showMessageDialog(null, "다시 입력해주세요");
 		}
 	}
 	
 	public static void main(String[] args) {
-		new LogInPanel();
 	}
 
 }

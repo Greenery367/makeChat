@@ -2,6 +2,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -20,15 +21,19 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class ServerFrame extends JFrame{
 
+	private Server server;
+	private ScrollPane scrollPane;
 	
-	private Server server=new Server();
+	private BackgroundPanel backgroundPanel;
 	
-	private JFrame mainFrame;
-	private JPanel loginPanel;
+	private JPanel mainPanel;
+	private JTextArea mainBoard;
+	
 	private JButton button;
 	private JLabel label;
 	private JTextField ipField;
@@ -39,17 +44,21 @@ public class ServerFrame extends JFrame{
 	private JLabel nameLabel;
 	private JLabel nateIcon;
 
-	public ServerFrame() {
-		setSize(400, 700);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		
+	public ServerFrame(Server server) {
+		this.server=server;
 		initData();
 		setInitLayout();
 		initListener();
 	} 
 
 	private void initData() {
+		backgroundPanel = new BackgroundPanel();
+		
+		mainPanel=new JPanel();
+		mainBoard=new JTextArea();
+		
+		scrollPane=new ScrollPane();
+		
 		button = new JButton("로그인");
 		label = new JLabel("네이트온 채팅 참여하기");
 		ipLabel = new JLabel("IP : ");
@@ -63,8 +72,13 @@ public class ServerFrame extends JFrame{
 
 	private void setInitLayout() {
 
+		setTitle("[네이트온 서버관리자]");
+		setSize(400,700);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(null);
 		setVisible(true);
+	
 		
 		nateIcon.setBounds(125,125,150,150);
 		ipLabel.setBounds(130, 350, 40, 20);
@@ -94,5 +108,67 @@ public class ServerFrame extends JFrame{
 			}
 		});
 	}
+	
+	private class BackgroundPanel extends JPanel{
+		private JPanel backgroundPanel;
+		
+		public BackgroundPanel() {
+			backgroundPanel=new JPanel();
+			add(backgroundPanel);
+		}
+	}
+
+	public Server getServer() {
+		return server;
+	}
+
+	public ScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+	public BackgroundPanel getBackgroundPanel() {
+		return backgroundPanel;
+	}
+
+
+	public JTextArea getMainBoard() {
+		return mainBoard;
+	}
+	public JButton getButton() {
+		return button;
+	}
+
+	public JLabel getLabel() {
+		return label;
+	}
+
+	public JTextField getIpField() {
+		return ipField;
+	}
+
+	public JLabel getIpLabel() {
+		return ipLabel;
+	}
+
+	public JTextField getPortField() {
+		return portField;
+	}
+
+	public JLabel getPortLabel() {
+		return portLabel;
+	}
+
+	public JTextField getNameField() {
+		return nameField;
+	}
+
+	public JLabel getNameLabel() {
+		return nameLabel;
+	}
+
+	public JLabel getNateIcon() {
+		return nateIcon;
+	}
+	
 	}
 
