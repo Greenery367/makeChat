@@ -47,6 +47,7 @@ public class Server {
 	public void startConnect() {
 		try {
 			serverSocket=new ServerSocket(5555);
+			serverViewAppendWriter("[알림] 서버 시작\n");
 			serverFrame.getButton().setEnabled(false);
 			connectClient();
 		} catch (Exception e) {
@@ -65,6 +66,7 @@ public class Server {
 						socket=serverSocket.accept();
 						serverViewAppendWriter("[알림] 사용자 접속 대기");
 						ConnectedUser user=new ConnectedUser(socket);
+						user.start();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

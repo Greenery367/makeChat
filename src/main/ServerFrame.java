@@ -21,15 +21,23 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
 
 public class ServerFrame extends JFrame{
 
 	private Server server;
 	private ScrollPane scrollPane;
 	
-	private BackgroundPanel backgroundPanel;
+	private JTabbedPane tabPane;
+	private LogInPanel logIn;
+	private WaitingRoomPanel waitRoom;
+	private MessagePanel messagePanel;
+
+	private CallBackClientbtwService callBackService;
 	
 	private JPanel mainPanel;
 	private JTextArea mainBoard;
@@ -52,10 +60,15 @@ public class ServerFrame extends JFrame{
 	} 
 
 	private void initData() {
-		backgroundPanel = new BackgroundPanel();
 		
 		mainPanel=new JPanel();
 		mainBoard=new JTextArea();
+		
+		logIn=new LogInPanel(callBackService);
+		waitRoom=new WaitingRoomPanel(callBackService);
+		messagePanel=new MessagePanel(callBackService);
+		tabPane=new JTabbedPane(JTabbedPane.TOP);
+		mainPanel=new JPanel();
 		
 		scrollPane=new ScrollPane();
 		
@@ -88,6 +101,20 @@ public class ServerFrame extends JFrame{
 		nameLabel.setBounds(110, 410, 60, 20);
 		nameField.setBounds(160, 410, 80, 20);
 		button.setBounds(150,450,90,20);
+		
+		add(mainPanel);
+		add(tabPane);
+		
+		mainPanel.setLayout(null);
+		setContentPane(mainPanel);
+		
+		tabPane.setBounds(0,0,getWidth(),getHeight());
+		mainPanel.add(tabPane);
+		
+		logIn.setLayout(null);
+		tabPane.addTab("로그인", null,logIn,null);
+		tabPane.addTab("대기실",null,waitRoom,null);
+		tabPane.addTab("채팅",null,messagePanel,null);
 		
 		add(nateIcon);
 		add(ipLabel);
@@ -124,10 +151,6 @@ public class ServerFrame extends JFrame{
 
 	public ScrollPane getScrollPane() {
 		return scrollPane;
-	}
-
-	public BackgroundPanel getBackgroundPanel() {
-		return backgroundPanel;
 	}
 
 
