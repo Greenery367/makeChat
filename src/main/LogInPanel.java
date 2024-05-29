@@ -39,8 +39,6 @@ public class LogInPanel extends JPanel{
 
 	public LogInPanel(CallBackClientbtwService callBackService) {
 		this.callBackService=callBackService;
-		setSize(400, 700);
-		
 		initData();
 		setInitLayout();
 		logIn();
@@ -253,15 +251,11 @@ public class LogInPanel extends JPanel{
 			String ip=ipField.getText();		
 			int port=Integer.parseInt(portField.getText());
 			String name=nameField.getText();
-			
 			callBackService.clickConnectServerBtn(ip, port, name);
-		
 		} else {
 			JOptionPane.showMessageDialog(null, "다시 입력해주세요");
 		}
 	}
 	
-	public static void main(String[] args) {
-	}
 
 }

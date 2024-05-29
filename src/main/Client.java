@@ -65,9 +65,10 @@ public class Client implements Protocol,CallBackClientbtwService{
 		this.port=port;
 		this.name=id;
 		this.ip=ip;
-		connectNetwork();
-		connectIO();
 		try {
+			connectNetwork();
+			connectIO();
+			
 			writer.write(id+"\n");
 			writer.flush();
 			clientFrame.setTitle("[네이트온] "+name+"님의 대화창");
