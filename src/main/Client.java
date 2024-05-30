@@ -1,5 +1,8 @@
 package main;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -25,6 +28,9 @@ public class Client implements Protocol,CallBackClientbtwService{
 	private JButton outRoomBtn;
 	private JButton secretMessageBtn;
 	private JButton sendMessageBtn;
+	private JButton sendImageBtn;
+	private JButton saveLogBtn;
+	private JButton imojiBtn;
 	
 	private Vector<String> userIdList=new Vector<>();
 	private Vector<String> roomNameList=new Vector<>();
@@ -45,7 +51,6 @@ public class Client implements Protocol,CallBackClientbtwService{
 	private String from;
 	private String message;
 	
-	
 	// 사용자 정의 생성자
 	public Client() {
 		clientFrame = new ClientFrame(this);
@@ -56,20 +61,25 @@ public class Client implements Protocol,CallBackClientbtwService{
 		makeRoomBtn = clientFrame.getWaitRoom().getMakeRoomBtn();
 		outRoomBtn = clientFrame.getWaitRoom().getOutRoomBtn();
 		secretMessageBtn = clientFrame.getWaitRoom().getSecretMsgBtn();
+		sendImageBtn = clientFrame.getWaitRoom().getSecretMsgBtn();
+		saveLogBtn = clientFrame.getWaitRoom().getSecretMsgBtn();
 		sendMessageBtn = clientFrame.getMessagePanel().getSendMessageBtn();
+		sendImageBtn = clientFrame.getMessagePanel().getSendImageBtn();
+		imojiBtn = clientFrame.getMessagePanel().getImojiBtn();
+		saveLogBtn = clientFrame.getMessagePanel().getSaveLogBtn();
 	}
 
 	@Override
-	public void clickConnectServerBtn(String ip, int port, String id) {
+	public void clickConnectServerBtn(String ip, int port, String name) {
 	
 		this.port=port;
-		this.name=id;
+		this.name=name;
 		this.ip=ip;
 		try {
-			connectNetwork();
+			socket=new Socket(ip,port);
 			connectIO();
 			
-			writer.write(id+"\n");
+			writer.write(name+"\n");
 			writer.flush();
 			clientFrame.setTitle("[네이트온] "+name+"님의 대화창");
 			
@@ -78,27 +88,21 @@ public class Client implements Protocol,CallBackClientbtwService{
 			enterRoomBtn.setEnabled(true);
 			secretMessageBtn.setEnabled(true);
 			sendMessageBtn.setEnabled(true);
-			
+			sendImageBtn.setEnabled(true);
+			sendImageBtn.setEnabled(true);
+			saveLogBtn.setEnabled(true);
+			imojiBtn.setEnabled(true);
+			System.out.println("버튼 클릭 확인");
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "접속 에러!","알림",JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
 	
-	private void connectNetwork(){
-		try {
-			this.socket=new Socket(ip,port);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "접속 에러!");
-			e.printStackTrace();
-		}
-	}
-	
 	private void connectIO() {
 		try {
 			reader=new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer=new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			
 			readThread();
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "클라이언트 입출력 장치 에러 !", "알림", JOptionPane.ERROR_MESSAGE, null);
@@ -109,13 +113,11 @@ public class Client implements Protocol,CallBackClientbtwService{
 	
 	private void readThread() {
 		new Thread(new Runnable() {
-
 			@Override
 			public void run() {
 				while (true) {
 					try {
 						String msg = reader.readLine();
-
 						checkProtocol(msg);
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(null, "클라이언트 입력 장치 에러 !", "알림", JOptionPane.ERROR_MESSAGE, null);
@@ -136,32 +138,40 @@ public class Client implements Protocol,CallBackClientbtwService{
 	}
 	
 	private void checkProtocol(String msg) {
-		StringTokenizer tokenizer=new StringTokenizer(message,"/");
+		StringTokenizer tokenizer = new StringTokenizer(msg, "/");
+
+		protocol = tokenizer.nextToken();
+		from = tokenizer.nextToken();
 		
-		protocol=tokenizer.nextToken();
-		from=tokenizer.nextToken();
-		
-		if(protocol.equals("Chatting")) {
-			message=tokenizer.nextToken();
+		if (protocol.equals("Chatting")) {
+			message = tokenizer.nextToken();
 			chatting();
-		} else if(protocol.equals("SecretMessage")) {
-			message=tokenizer.nextToken();
+
+		} else if (protocol.equals("SecretMessage")) {
+			message = tokenizer.nextToken();
 			secretMessage();
-		} else if(protocol.equals("MakeRoom")) {
+
+		} else if (protocol.equals("MakeRoom")) {
 			makeRoom();
-		} else if(protocol.equals("MadeRoom")) {
+
+		} else if (protocol.equals("MadeRoom")) {
 			madeRoom();
-		} else if(protocol.equals("NewRoom")) {
+
+		} else if (protocol.equals("NewRoom")) {
 			newRoom();
-		} else if(protocol.equals("OutRoom")) {
+
+		} else if (protocol.equals("OutRoom")) {
 			outRoom();
-		} else if(protocol.equals("EnterRoom")) {
+
+		} else if (protocol.equals("EnterRoom")) {
 			enterRoom();
-		} else if(protocol.equals("NewUser")) {
+
+		} else if (protocol.equals("NewUser")) {
 			newUser();
-		} else if(protocol.equals("ConnectedUser")){
+
+		} else if (protocol.equals("ConnectedUser")) {
 			connectedUser();
-		} else if(protocol.equals("EmptyRoom")) {
+		} else if (protocol.equals("EmptyRoom")) {
 			roomNameList.remove(from);
 			roomList.setListData(roomNameList);
 			makeRoomBtn.setEnabled(true);
@@ -174,10 +184,20 @@ public class Client implements Protocol,CallBackClientbtwService{
 			userIdList.remove(from);
 			userList.setListData(userIdList);
 		}
-		
 	}
 	
-	
+	@Override
+	public void chatting() {
+		if (name.equals(from)) {
+			mainMessageBox.append("[나] \n" + message + "\n");
+		} else if (from.equals("입장")) {
+			mainMessageBox.append("▶" + from + "◀" + message + "\n");
+		} else if (from.equals("퇴장")) {
+			mainMessageBox.append("▷" + from + "◁" + message + "\n");
+		} else {
+			mainMessageBox.append("[" + from + "] \n" + message + "\n");
+		}
+	}
 
 	@Override
 	public void clickSendMessageBtn(String messageText) {
@@ -204,19 +224,6 @@ public class Client implements Protocol,CallBackClientbtwService{
 	@Override
 	public void clickEnterRoomBtn(String roomName) {
 		writer("EnterRoom/" + roomName);
-	}
-
-	@Override
-	public void chatting() {
-		if (name.equals(from)) {
-			mainMessageBox.append("[나] \n" + message + "\n");
-		} else if (from.equals("입장")) {
-			mainMessageBox.append("▶" + from + "◀" + message + "\n");
-		} else if (from.equals("퇴장")) {
-			mainMessageBox.append("▷" + from + "◁" + message + "\n");
-		} else {
-			mainMessageBox.append("[" + from + "] \n" + message + "\n");
-		}
 	}
 
 	@Override

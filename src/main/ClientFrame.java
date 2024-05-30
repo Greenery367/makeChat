@@ -13,6 +13,7 @@ public class ClientFrame extends JFrame {
 	private LogInPanel logIn;
 	private WaitingRoomPanel waitRoom;
 	private MessagePanel messagePanel;
+	private JPanel checkFortune;
 	
 	private CallBackClientbtwService callBackService;
 	
@@ -54,6 +55,7 @@ public class ClientFrame extends JFrame {
 		logIn=new LogInPanel(callBackService);
 		waitRoom=new WaitingRoomPanel(callBackService);
 		messagePanel=new MessagePanel(callBackService);
+		checkFortune=new checkFortunePanel(callBackService);
 		tabPane=new JTabbedPane(JTabbedPane.TOP);
 		mainPanel=new JPanel();
 	}
@@ -78,6 +80,7 @@ public class ClientFrame extends JFrame {
 		tabPane.addTab("로그인", null,logIn,null);
 		tabPane.addTab("대기실",null,waitRoom,null);
 		tabPane.addTab("채팅",null,messagePanel,null);
+		tabPane.addTab("운세 보기",null,checkFortune,null);
 		
 		setVisible(true);
 	}

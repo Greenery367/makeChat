@@ -1,5 +1,6 @@
 package main;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.ScrollPane;
@@ -25,18 +26,24 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 
 public class ServerFrame extends JFrame{
 
 	private Server server;
 	private ScrollPane scrollPane;
-	
+	private JLabel nateIcon;
 	private JTabbedPane tabPane;
-	private LogInPanel logIn;
-	private WaitingRoomPanel waitRoom;
-	private MessagePanel messagePanel;
+	private JPanel portPanel;
 
+	private JPanel checkFortune;
+	
+	private JPanel checkClientPanel;
+	private JPanel checkRoomPanel;
+	
+	private JPanel backgroundPanel;
 	private CallBackClientbtwService callBackService;
 	
 	private JPanel mainPanel;
@@ -50,7 +57,8 @@ public class ServerFrame extends JFrame{
 	private JLabel portLabel;
 	private JTextField nameField;
 	private JLabel nameLabel;
-	private JLabel nateIcon;
+	private JLabel title;
+	private JLabel title1;
 
 	public ServerFrame(Server server) {
 		this.server=server;
@@ -60,71 +68,80 @@ public class ServerFrame extends JFrame{
 	} 
 
 	private void initData() {
+		checkClientPanel=new checkClientPanel(callBackService);
+		checkFortune=new checkFortunePanel(callBackService);
+		backgroundPanel=new JPanel();
 		
 		mainPanel=new JPanel();
 		mainBoard=new JTextArea();
 		
-		logIn=new LogInPanel(callBackService);
-		waitRoom=new WaitingRoomPanel(callBackService);
-		messagePanel=new MessagePanel(callBackService);
-		tabPane=new JTabbedPane(JTabbedPane.TOP);
+		tabPane=new JTabbedPane(JTabbedPane.LEFT);
 		mainPanel=new JPanel();
 		
 		scrollPane=new ScrollPane();
+		portPanel=new JPanel();
 		
 		button = new JButton("로그인");
-		label = new JLabel("네이트온 채팅 참여하기");
-		ipLabel = new JLabel("IP : ");
-		ipField = new JTextField(10);
 		portLabel = new JLabel("Port number : ");
 		portField = new JTextField(10);
-		nameLabel = new JLabel("Name : ");
-		nameField = new JTextField(10);
 		nateIcon=new JLabel(new ImageIcon("images/NATEON-PC.png"));
+		
+		portField.setText("5555");
+		title=new JLabel("Nate on에 오신 것을 환영합니다.");
+		title1=new JLabel("채팅을 효율적으로 관리해보세요.");
+		
+	
 	}
 
 	private void setInitLayout() {
-
-		setTitle("[네이트온 서버관리자]");
-		setSize(400,700);
+		setTitle("[네이트온]");
+		setSize(490,700);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(null);
-		setVisible(true);
+		
+		backgroundPanel.setSize(getWidth(),getHeight());
+		backgroundPanel.setLayout(null);
+		portPanel.setLayout(null);
+		add(backgroundPanel);
+		
+		mainPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK, 5), "Server"));
+		mainPanel.setBounds(40, 100, 320, 350);
+		mainBoard.setEnabled(false);
+		mainPanel.add(scrollPane);
+		scrollPane.setBounds(45, 100, 300, 315);
+		scrollPane.add(mainBoard);
+		backgroundPanel.add(mainPanel);
+
+		
+		portPanel.setBackground(new Color(0, 0, 0, 0));
+		nateIcon.setBounds(125, 125, 150, 150);
+		portLabel.setBounds(100, 355, 80, 20);
+		portField.setBounds(190, 355, 80, 20);
+		
+		title.setBounds(100,300,200,30);
+		title1.setBounds(100,320,200,30);
+		button.setBounds(140, 410, 90, 30);
+		
+		portPanel.add(portLabel);
+		portPanel.add(portField);
+		portPanel.add(nateIcon);
+		portPanel.add(button);
+		portPanel.add(title);
+		portPanel.add(title1);
+		mainPanel.add(portPanel);
 	
 		
-		nateIcon.setBounds(125,125,150,150);
-		ipLabel.setBounds(130, 350, 40, 20);
-		ipField.setBounds(160, 350, 80, 20);
-		portLabel.setBounds(70, 380, 80, 20);
-		portField.setBounds(160, 380, 80, 20);
-		nameLabel.setBounds(110, 410, 60, 20);
-		nameField.setBounds(160, 410, 80, 20);
-		button.setBounds(150,450,90,20);
-		
-		add(mainPanel);
-		add(tabPane);
-		
-		mainPanel.setLayout(null);
-		setContentPane(mainPanel);
-		
 		tabPane.setBounds(0,0,getWidth(),getHeight());
-		mainPanel.add(tabPane);
+		backgroundPanel.add(tabPane);
 		
-		logIn.setLayout(null);
-		tabPane.addTab("로그인", null,logIn,null);
-		tabPane.addTab("대기실",null,waitRoom,null);
-		tabPane.addTab("채팅",null,messagePanel,null);
 		
-		add(nateIcon);
-		add(ipLabel);
-		add(ipField);
-		add(portLabel);
-		add(portField);
-		add(nameLabel);
-		add(nameField);
-		add(button);
+		tabPane.addTab("서버 만들기",null,portPanel,null);
+		tabPane.addTab("채팅 확인하기",null,mainPanel,null);
+		//tabPane.addTab("접속 멤버 확인하기",null,checkClientPanel,null);
+		tabPane.addTab("운세 보기",null,checkFortune,null);
 		
+		
+		setVisible(true);
 	}
 	
 	private void initListener() {

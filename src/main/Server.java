@@ -127,7 +127,7 @@ public class Server {
 		private void sendInformation() {
 			try {
 				id=reader.readLine();
-				serverViewAppendWriter("[접속]"+name+"님\n");
+				serverViewAppendWriter("[접속]"+id+"님\n");
 				newUser();
 				connectedUser();
 				madeRoom();

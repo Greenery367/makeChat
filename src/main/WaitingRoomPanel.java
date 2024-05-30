@@ -223,23 +223,22 @@ public class WaitingRoomPanel extends JPanel implements ActionListener {
 				inputSecretMsg.setText("");
 				userList.setSelectedValue(null, false);
 			}
-			else if(e.getSource()==makeRoomBtn) {
-				String roomName=JOptionPane.showInputDialog("[방 이름 설정");
+		} else if(e.getSource()==makeRoomBtn) {
+				String roomName=JOptionPane.showInputDialog("[방 이름 설정]");
 				if(!roomName.equals(null)) {
 					callBackService.clickMakeRoomBtn(roomName);
 				}
-			} else if (e.getSource() == outRoomBtn) {
+		} else if (e.getSource() == outRoomBtn) {
 
 				String roomName = roomList.getSelectedValue();
 				callBackService.clickOutRoomBtn(roomName);
 				roomList.setSelectedValue(null, false);
 
-			} else if (e.getSource() == enterRoomBtn) {
+		} else if (e.getSource() == enterRoomBtn) {
 
 				String roomName = roomList.getSelectedValue();
 				callBackService.clickEnterRoomBtn(roomName);
 				roomList.setSelectedValue(null, false);
-				}
 			}
 		}
 }
