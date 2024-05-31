@@ -116,6 +116,7 @@ public class MessagePanel extends JPanel {
 		sendImageBtn=new JButton("이미지 전송");
 		saveLogBtn=new JButton("채팅 저장하기");
 		imojiBtn=new JButton(new ImageIcon("images/emoji/clickButton.png"));
+		System.out.println("이모지 버튼 생성");
 		
 	}
 	
@@ -188,10 +189,11 @@ public class MessagePanel extends JPanel {
 	}
 	
 	private void sendImoji() {
+		System.out.println("센드 이모지 작동");
 		imojiBtn.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("이닛리스너 작동");
-				sendingImoji();
+				new Emoji(callBackService);
 			}
 		});
 	}
@@ -206,59 +208,6 @@ public class MessagePanel extends JPanel {
 	
 	public void sendingImage() {
 		JFileChooser fileComponent = new JFileChooser();
-	}
-	
-	public void sendingImoji() {
-		System.out.println("센딩 이모지 시작");
-		JFrame sendEmoji=new JFrame("이모티콘 선택창");
-		JPanel sendEmojiPanel=new JPanel();
-		sendEmojiPanel.setBounds(0,0,getWidth(),getHeight());
-		sendEmoji.setLocationRelativeTo(null);
-		
-		System.out.println("이미지 아이콘 생성 시작");
-		ImageIcon[] emojis=new ImageIcon[10];
-		emojis[0]=new ImageIcon("images/emoji/a1.png");
-		emojis[1]=new ImageIcon("images/emoji/a2.png");
-		emojis[2]=new ImageIcon("images/emoji/a3.png");
-		emojis[3]=new ImageIcon("images/emoji/a4.png");
-		emojis[4]=new ImageIcon("images/emoji/a5.png");
-		emojis[5]=new ImageIcon("images/emoji/a6.png");
-		emojis[6]=new ImageIcon("images/emoji/a7.png");
-		emojis[7]=new ImageIcon("images/emoji/a8.png");
-		emojis[8]=new ImageIcon("images/emoji/a9.png");
-		emojis[9]=new ImageIcon("images/emoji/a10.png");
-		
-		System.out.println("버튼 생성");
-		JButton s1=new JButton(emojis[0]);
-		JButton s2=new JButton(emojis[1]);
-		JButton s3=new JButton(emojis[2]);
-		JButton s4=new JButton(emojis[3]);
-		JButton s5=new JButton(emojis[4]);
-		JButton s6=new JButton(emojis[5]);
-		JButton s7=new JButton(emojis[6]);
-		JButton s8=new JButton(emojis[7]);
-		JButton s9=new JButton(emojis[8]);
-		JButton s10=new JButton(emojis[9]);
-		
-		System.out.println("이모지 패널을 프레임에 붙이기");
-		sendEmoji.add(sendEmojiPanel);
-		
-		System.out.println("패널에 버튼 붙이기");
-		sendEmojiPanel.add(s1);
-		sendEmojiPanel.add(s2);
-		sendEmojiPanel.add(s3);
-		sendEmojiPanel.add(s4);
-		sendEmojiPanel.add(s5);
-		sendEmojiPanel.add(s6);
-		sendEmojiPanel.add(s7);
-		sendEmojiPanel.add(s8);
-		sendEmojiPanel.add(s9);
-		sendEmojiPanel.add(s10);
-		
-		sendEmoji.setSize(420,160);
-		sendEmoji.setLayout(null);
-		sendEmoji.setVisible(true);
-		sendEmoji.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void savingLog() {

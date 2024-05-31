@@ -140,8 +140,6 @@ public class ServerFrame extends JFrame{
 		tabPane.addTab("채팅 확인하기",null,mainPanel,null);
 		tabPane.addTab("접속 멤버 관리하기",null,checkClientPanel,null);
 		tabPane.addTab("채팅창 관리하기",null,checkRoomPanel,null);
-		tabPane.addTab("운세 보기",null,checkFortune,null);
-		
 		
 		setVisible(true);
 	}
