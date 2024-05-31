@@ -77,7 +77,7 @@ public class checkFortunePanel extends JPanel {
 		if(luck==0) {
 			luckText=" 주변의 사람들에게 친절을 베풀면 큰 행운이 되어 돌아옵니다.";
 		} else if(luck==1) {
-			luckText="모르는 것이 생긴다면 주저하지 말고 물어봅시다. 겸손은 덕이 됩니다.";
+			luckText="모르는 것이 생긴다면 주저하지 말고 물어봅시다. 좋은 깨달음을 얻을지도 모릅니다.";
 		} else if(luck==2) {
 			luckText="서두르기보다는 천천히 일을 해나가는 게 좋습니다. 돌아가는 길이 지름길입니다.";
 		} else if(luck==3) {

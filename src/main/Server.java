@@ -89,6 +89,7 @@ public class Server {
 		try {
 			fileWriter=new FileWriter("NateOn.txt",true);
 			mainBoard.append(str);
+			
 			fileWriter.write(str);
 			fileWriter.flush();
 		} catch (FileNotFoundException e) {
@@ -302,7 +303,7 @@ public class Server {
 	
 	}
 	
-	private class MyRoom{
+	public class MyRoom{
 		private String roomName;
 		private Vector<ConnectedUser> myRoom=new Vector<>();
 		
@@ -344,6 +345,10 @@ public class Server {
 	
 	
 	
+	public Vector<MyRoom> getMadeRooms() {
+		return madeRooms;
+	}
+
 	public static void main(String[] args) {
 		new Server();
 	}
